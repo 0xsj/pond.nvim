@@ -11,9 +11,18 @@ struct ColorValue {
 
 extension Color {
     init(light: Color, dark: Color) {
+        #if os(iOS) || os(watchOS) || os(tvOS)
         self.init(UIColor { traitCollection in
             traitCollection.userInterfaceStyle == .dark ? UIColor(dark) : UIColor(light)
         })
+        #elseif os(macOS)
+        self.init(NSColor(name: nil, dynamicProvider: { appearance in
+            appearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua ? NSColor(dark) : NSColor(light)
+        }))
+        #else
+        // Fallback for other platforms
+        self = light
+        #endif
     }
     
     init(hex: String) {
@@ -184,11 +193,11 @@ struct AppTypography {
     }
     
     struct Weight {
-        static let regular = Font.Weight(rawValue: 4)
-        static let medium = Font.Weight(rawValue: 5)
-        static let semibold = Font.Weight(rawValue: 6)
-        static let bold = Font.Weight(rawValue: 7)
-        static let heavy = Font.Weight(rawValue: 8)
+        static let regular: Font.Weight = .regular
+        static let medium: Font.Weight = .medium
+        static let semibold: Font.Weight = .semibold
+        static let bold: Font.Weight = .bold
+        static let heavy: Font.Weight = .heavy
     }
     
     struct LineHeight {
