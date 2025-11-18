@@ -8,240 +8,197 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.appTheme) var theme
+    var store: AppStore  // Direct reference to observable store
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: AppSpacing.xl) {
-                // Header
-                VStack(spacing: AppSpacing.sm) {
-                    Text("🔤")
-                        .font(.system(size: 48))
-                    
-                    Text("Typography System")
-                        .textStyle(.title1)
-                        .themedForeground(.primary)
-                    
-                    Text("All text styles with sizes and weights")
-                        .textStyle(.body, color: .secondary)
-                }
-                .paddingTop(.xl)
-                
-                // Typography styles
-                VStack(spacing: AppSpacing.lg) {
-                    // Large Title
-                    TypographyRow(
-                        label: "Large Title",
-                        example: "Large Title Text"
-                    ) {
-                        Text("Large Title Text")
-                            .textStyle(.largeTitle)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Title 1
-                    TypographyRow(
-                        label: "Title 1",
-                        example: "Title 1 Text"
-                    ) {
-                        Text("Title 1 Text")
-                            .textStyle(.title1)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Title 2
-                    TypographyRow(
-                        label: "Title 2",
-                        example: "Title 2 Text"
-                    ) {
-                        Text("Title 2 Text")
-                            .textStyle(.title2)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Title 3
-                    TypographyRow(
-                        label: "Title 3",
-                        example: "Title 3 Text"
-                    ) {
-                        Text("Title 3 Text")
-                            .textStyle(.title3)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Headline
-                    TypographyRow(
-                        label: "Headline",
-                        example: "Headline Text"
-                    ) {
-                        Text("Headline Text")
-                            .textStyle(.headline)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Body
-                    TypographyRow(
-                        label: "Body",
-                        example: "Body Text"
-                    ) {
-                        Text("Body Text")
-                            .textStyle(.body)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Callout
-                    TypographyRow(
-                        label: "Callout",
-                        example: "Callout Text"
-                    ) {
-                        Text("Callout Text")
-                            .textStyle(.callout)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Subheadline
-                    TypographyRow(
-                        label: "Subheadline",
-                        example: "Subheadline Text"
-                    ) {
-                        Text("Subheadline Text")
-                            .textStyle(.subheadline)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Footnote
-                    TypographyRow(
-                        label: "Footnote",
-                        example: "Footnote Text"
-                    ) {
-                        Text("Footnote Text")
-                            .textStyle(.footnote)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Caption 1
-                    TypographyRow(
-                        label: "Caption 1",
-                        example: "Caption 1 Text"
-                    ) {
-                        Text("Caption 1 Text")
-                            .textStyle(.caption1)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Caption 2
-                    TypographyRow(
-                        label: "Caption 2",
-                        example: "Caption 2 Text"
-                    ) {
-                        Text("Caption 2 Text")
-                            .textStyle(.caption2)
-                            .themedForeground(.primary)
-                    }
-                    
-                    // Color variations
-                    VStack(alignment: .leading, spacing: AppSpacing.md) {
-                        Text("Color Levels")
-                            .textStyle(.headline)
-                            .themedForeground(.primary)
-                            .padding(.sm)
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 24) {
+                    // Header
+                    VStack(spacing: 12) {
+                        Text("📱")
+                            .font(.system(size: 64))
                         
-                        VStack(alignment: .leading, spacing: AppSpacing.xs) {
-                            Text("Primary Label")
-                                .textStyle(.body, color: .primary)
-                            
-                            Text("Secondary Label")
-                                .textStyle(.body, color: .secondary)
-                            
-                            Text("Tertiary Label")
-                                .textStyle(.body, color: .tertiary)
-                            
-                            Text("Quaternary Label")
-                                .textStyle(.body, color: .quaternary)
+                        Text("Component Library")
+                            .font(.largeTitle.bold())
+                        
+                        Text("iOS Design System")
+                            .font(.subheadline)
+                            .foregroundStyle(store.themeColors.labelSecondary)
+                        
+                        // Theme toggle
+                        Button(action: { store.toggleColorScheme() }) {
+                            HStack(spacing: 8) {
+                                Image(systemName: store.isDark ? "moon.fill" : "sun.max.fill")
+                                Text(store.isDark ? "Dark Mode" : "Light Mode")
+                            }
+                            .font(.system(size: AppTypography.Size.callout, weight: .medium))
+                            .foregroundStyle(store.themeColors.blue)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(
+                                RoundedRectangle(cornerRadius: AppRadius.md)
+                                    .fill(store.themeColors.fillSecondary)
+                            )
                         }
-                        .padding(.lg)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .surfaceStyle(background: .secondary, radius: .md, elevation: .sm)
+                        
+                        // Device info
+                        HStack(spacing: 4) {
+                            BadgeView(text: store.deviceInfo.breakpoint.rawValue.uppercased(), variant: .info, size: .small)
+                            Text("•")
+                                .foregroundStyle(store.themeColors.labelTertiary)
+                            Text("\(Int(store.deviceInfo.width))×\(Int(store.deviceInfo.height))")
+                                .font(.caption)
+                                .foregroundStyle(store.themeColors.labelTertiary)
+                        }
+                    }
+                    .padding(.top, 32)
+                    
+                    // Component Categories
+                    VStack(spacing: 16) {
+                        // Display Components
+                        NavigationLink(destination: DisplayShowcaseView()) {
+                            showcaseCard(
+                                icon: "🎨",
+                                title: "Display Components",
+                                description: "Badge, Card, Avatar, Chip",
+                                count: 4
+                            )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                        // Typography (coming soon)
+                        showcaseCard(
+                            icon: "🔤",
+                            title: "Typography",
+                            description: "Text styles and weights",
+                            count: 11,
+                            isDisabled: true
+                        )
+                        
+                        // Forms (coming soon)
+                        showcaseCard(
+                            icon: "📝",
+                            title: "Form Components",
+                            description: "Button, Input, Checkbox, etc.",
+                            count: 0,
+                            isDisabled: true
+                        )
+                        
+                        // Feedback (coming soon)
+                        showcaseCard(
+                            icon: "💬",
+                            title: "Feedback Components",
+                            description: "Alert, Progress, Skeleton",
+                            count: 0,
+                            isDisabled: true
+                        )
+                        
+                        // Overlays (coming soon)
+                        showcaseCard(
+                            icon: "⚡",
+                            title: "Overlay Components",
+                            description: "Modal, Toast, Bottom Sheet",
+                            count: 0,
+                            isDisabled: true
+                        )
                     }
                     
-                    // Weight variations
-                    VStack(alignment: .leading, spacing: AppSpacing.md) {
-                        Text("Font Weights")
-                            .textStyle(.headline)
-                            .themedForeground(.primary)
-                            .padding(.sm)
-                        
-                        VStack(alignment: .leading, spacing: AppSpacing.xs) {
-                            Text("Regular Weight")
-                                .textStyle(.body, weight: AppTypography.Weight.regular)
-                                .themedForeground(.primary)
-                            
-                            Text("Medium Weight")
-                                .textStyle(.body, weight: AppTypography.Weight.medium)
-                                .themedForeground(.primary)
-                            
-                            Text("Semibold Weight")
-                                .textStyle(.body, weight: AppTypography.Weight.semibold)
-                                .themedForeground(.primary)
-                            
-                            Text("Bold Weight")
-                                .textStyle(.body, weight: AppTypography.Weight.bold)
-                                .themedForeground(.primary)
-                            
-                            Text("Heavy Weight")
-                                .textStyle(.body, weight: AppTypography.Weight.heavy)
-                                .themedForeground(.primary)
-                        }
-                        .padding(.lg)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .surfaceStyle(background: .secondary, radius: .md, elevation: .sm)
+                    // Stats
+                    HStack(spacing: 16) {
+                        statCard(value: "4", label: "Components")
+                        statCard(value: "3", label: "Platforms")
+                        statCard(value: "∞", label: "Possibilities")
                     }
+                    .padding(.top, 16)
                 }
-                .paddingHorizontal(.lg)
+                .padding()
             }
-            .frame(maxWidth: .infinity)
+            .background(store.themeColors.backgroundPrimary)
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
         }
-        .themedBackground(.primary)
     }
-}
-
-// Helper component for typography rows
-struct TypographyRow<Content: View>: View {
-    let label: String
-    let example: String
-    @ViewBuilder let content: () -> Content
-    @Environment(\.appTheme) var theme
     
-    var body: some View {
-        VStack(alignment: .leading, spacing: AppSpacing.xs) {
-            HStack {
-                Text(label)
-                    .textStyle(.caption1, weight: AppTypography.Weight.semibold)
-                    .themedForeground(.tertiary)
+    // MARK: - Showcase Card
+    @ViewBuilder
+    private func showcaseCard(
+        icon: String,
+        title: String,
+        description: String,
+        count: Int,
+        isDisabled: Bool = false
+    ) -> some View {
+        CardView(variant: .elevated) {
+            HStack(spacing: 16) {
+                // Icon
+                Text(icon)
+                    .font(.system(size: 40))
+                    .frame(width: 60, height: 60)
+                    .background(store.themeColors.fillSecondary)
+                    .clipShape(RoundedRectangle(cornerRadius: AppRadius.md))
+                
+                // Content
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Text(title)
+                            .font(.headline)
+                            .foregroundStyle(isDisabled ? store.themeColors.labelTertiary : store.themeColors.labelPrimary)
+                        
+                        if count > 0 {
+                            BadgeView(text: "\(count)", variant: .primary, size: .small)
+                        }
+                        
+                        if isDisabled {
+                            BadgeView(text: "Soon", variant: .neutral, size: .small)
+                        }
+                    }
+                    
+                    Text(description)
+                        .font(.subheadline)
+                        .foregroundStyle(store.themeColors.labelSecondary)
+                }
                 
                 Spacer()
                 
-                Text("\(Int(getSize(for: example)))pt")
-                    .textStyle(.caption2)
-                    .themedForeground(.quaternary)
+                // Arrow
+                if !isDisabled {
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(store.themeColors.labelTertiary)
+                }
             }
-            
-            content()
         }
+        .opacity(isDisabled ? 0.6 : 1.0)
     }
     
-    private func getSize(for text: String) -> CGFloat {
-        // This is a simplified version - in reality you'd map the style
-        return 17 // Default body size
+    // MARK: - Stat Card
+    private func statCard(value: String, label: String) -> some View {
+        CardView(variant: .filled, padding: .md) {
+            VStack(spacing: 4) {
+                Text(value)
+                    .font(.title.bold())
+                    .foregroundStyle(store.themeColors.blue)
+                
+                Text(label)
+                    .font(.caption)
+                    .foregroundStyle(store.themeColors.labelSecondary)
+            }
+            .frame(maxWidth: .infinity)
+        }
     }
 }
 
 #Preview("Light Mode") {
-    ContentView()
-        .environment(\.colorScheme, .light)
+    let store = AppStore()
+    store.setColorScheme(.light)
+    
+    return ContentView(store: store)
 }
 
 #Preview("Dark Mode") {
-    ContentView()
-        .environment(\.colorScheme, .dark)
+    let store = AppStore()
+    store.setColorScheme(.dark)
+    
+    return ContentView(store: store)
 }

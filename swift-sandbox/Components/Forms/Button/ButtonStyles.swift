@@ -2,7 +2,7 @@
 //  ButtonStyles.swift
 //  swift-sandbox
 //
-//  Created by seung joon lee on 17.11.2025.
+//  Button styles using Observable store
 //
 
 import SwiftUI
@@ -48,7 +48,7 @@ public enum ButtonSize {
 
 // MARK: - Primary Button Style
 struct PrimaryButtonStyle: ButtonStyle {
-    @Environment(\.appTheme) var theme
+    @Environment(\.appStore) var store
     @Environment(\.isEnabled) var isEnabled
     let size: ButtonSize
     
@@ -60,7 +60,7 @@ struct PrimaryButtonStyle: ButtonStyle {
             .padding(.horizontal, size.horizontalPadding)
             .background(
                 RoundedRectangle(cornerRadius: AppRadius.md)
-                    .fill(isEnabled ? theme.blue : theme.gray4)
+                    .fill(isEnabled ? store.themeColors.blue : store.themeColors.gray4)
             )
             .opacity(configuration.isPressed ? 0.8 : 1.0)
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
@@ -70,19 +70,19 @@ struct PrimaryButtonStyle: ButtonStyle {
 
 // MARK: - Secondary Button Style
 struct SecondaryButtonStyle: ButtonStyle {
-    @Environment(\.appTheme) var theme
+    @Environment(\.appStore) var store
     @Environment(\.isEnabled) var isEnabled
     let size: ButtonSize
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.system(size: size.fontSize, weight: AppTypography.Weight.semibold))
-            .foregroundStyle(isEnabled ? theme.blue : theme.gray)
+            .foregroundStyle(isEnabled ? store.themeColors.blue : store.themeColors.gray)
             .frame(height: size.height)
             .padding(.horizontal, size.horizontalPadding)
             .background(
                 RoundedRectangle(cornerRadius: AppRadius.md)
-                    .strokeBorder(isEnabled ? theme.blue : theme.gray3, lineWidth: 1.5)
+                    .strokeBorder(isEnabled ? store.themeColors.blue : store.themeColors.gray3, lineWidth: 1.5)
             )
             .opacity(configuration.isPressed ? 0.8 : 1.0)
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
@@ -92,14 +92,14 @@ struct SecondaryButtonStyle: ButtonStyle {
 
 // MARK: - Text Button Style
 struct TextButtonStyle: ButtonStyle {
-    @Environment(\.appTheme) var theme
+    @Environment(\.appStore) var store
     @Environment(\.isEnabled) var isEnabled
     let size: ButtonSize
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.system(size: size.fontSize, weight: AppTypography.Weight.semibold))
-            .foregroundStyle(isEnabled ? theme.blue : theme.gray)
+            .foregroundStyle(isEnabled ? store.themeColors.blue : store.themeColors.gray)
             .frame(height: size.height)
             .padding(.horizontal, size.horizontalPadding)
             .opacity(configuration.isPressed ? 0.6 : 1.0)
@@ -109,7 +109,7 @@ struct TextButtonStyle: ButtonStyle {
 
 // MARK: - Destructive Button Style
 struct DestructiveButtonStyle: ButtonStyle {
-    @Environment(\.appTheme) var theme
+    @Environment(\.appStore) var store
     @Environment(\.isEnabled) var isEnabled
     let size: ButtonSize
     
@@ -121,7 +121,7 @@ struct DestructiveButtonStyle: ButtonStyle {
             .padding(.horizontal, size.horizontalPadding)
             .background(
                 RoundedRectangle(cornerRadius: AppRadius.md)
-                    .fill(isEnabled ? theme.red : theme.gray4)
+                    .fill(isEnabled ? store.themeColors.red : store.themeColors.gray4)
             )
             .opacity(configuration.isPressed ? 0.8 : 1.0)
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
@@ -131,7 +131,7 @@ struct DestructiveButtonStyle: ButtonStyle {
 
 // MARK: - View Extension for Convenience
 extension View {
-    func buttonVariant(_ variant: ButtonVariant, size: ButtonSize = .medium) -> some View {
+    public func buttonVariant(_ variant: ButtonVariant, size: ButtonSize = .medium) -> some View {
         switch variant {
         case .primary:
             return AnyView(self.buttonStyle(PrimaryButtonStyle(size: size)))

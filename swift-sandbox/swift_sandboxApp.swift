@@ -2,16 +2,17 @@
 //  swift_sandboxApp.swift
 //  swift-sandbox
 //
-//  Created by seung joon lee on 12.11.2025.
-//
 
 import SwiftUI
 
 @main
 struct swift_sandboxApp: App {
+    @State private var appStore = AppStore()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(store: appStore)
+                .preferredColorScheme(appStore.colorScheme)
         }
     }
 }

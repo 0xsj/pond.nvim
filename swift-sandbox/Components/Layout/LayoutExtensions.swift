@@ -1,39 +1,46 @@
+//
+//  LayoutExtensions.swift
+//  swift-sandbox
+//
+//  Layout utilities using design tokens
+//
+
 import SwiftUI
 
 // MARK: - Padding Extensions
 extension View {
     /// Apply padding using design tokens
-    func padding(_ spacing: PaddingToken) -> some View {
+    public func padding(_ spacing: PaddingToken) -> some View {
         self.padding(spacing.value)
     }
     
     /// Apply horizontal padding using design tokens
-    func paddingHorizontal(_ spacing: PaddingToken) -> some View {
+    public func paddingHorizontal(_ spacing: PaddingToken) -> some View {
         self.padding(.horizontal, spacing.value)
     }
     
     /// Apply vertical padding using design tokens
-    func paddingVertical(_ spacing: PaddingToken) -> some View {
+    public func paddingVertical(_ spacing: PaddingToken) -> some View {
         self.padding(.vertical, spacing.value)
     }
     
     /// Apply leading padding using design tokens
-    func paddingLeading(_ spacing: PaddingToken) -> some View {
+    public func paddingLeading(_ spacing: PaddingToken) -> some View {
         self.padding(.leading, spacing.value)
     }
     
     /// Apply trailing padding using design tokens
-    func paddingTrailing(_ spacing: PaddingToken) -> some View {
+    public func paddingTrailing(_ spacing: PaddingToken) -> some View {
         self.padding(.trailing, spacing.value)
     }
     
     /// Apply top padding using design tokens
-    func paddingTop(_ spacing: PaddingToken) -> some View {
+    public func paddingTop(_ spacing: PaddingToken) -> some View {
         self.padding(.top, spacing.value)
     }
     
     /// Apply bottom padding using design tokens
-    func paddingBottom(_ spacing: PaddingToken) -> some View {
+    public func paddingBottom(_ spacing: PaddingToken) -> some View {
         self.padding(.bottom, spacing.value)
     }
 }
@@ -41,7 +48,7 @@ extension View {
 // MARK: - Corner Radius Extensions
 extension View {
     /// Apply corner radius using design tokens
-    func radius(_ radius: RadiusToken) -> some View {
+    public func radius(_ radius: RadiusToken) -> some View {
         self.clipShape(RoundedRectangle(cornerRadius: radius.value))
     }
 }
@@ -49,28 +56,13 @@ extension View {
 // MARK: - Shadow/Elevation Extensions
 extension View {
     /// Apply elevation (shadow) using design tokens
-    func elevation(_ elevation: ElevationToken) -> some View {
+    public func elevation(_ elevation: ElevationToken) -> some View {
         self.shadow(
             color: Color.black.opacity(0.1),
             radius: elevation.value,
             x: 0,
             y: elevation.value / 2
         )
-    }
-}
-
-// MARK: - Surface Style Extension
-extension View {
-    /// Apply a card/surface style with background, radius, and elevation
-    func surfaceStyle(
-        background: BackgroundLevel = .secondary,
-        radius: RadiusToken = .md,
-        elevation: ElevationToken = .sm
-    ) -> some View {
-        self
-            .themedBackground(background)
-            .radius(radius)
-            .elevation(elevation)
     }
 }
 

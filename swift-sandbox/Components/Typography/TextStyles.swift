@@ -65,11 +65,18 @@ public enum TextStyle {
 
 // MARK: - View Extension for Text Styling
 extension View {
-    /// Apply a text style with optional weight and color
-    func textStyle(
+    /// Apply a text style with optional weight
+    /// Note: Color should be applied separately using .foregroundStyle()
+    ///
+    /// Example:
+    /// ```
+    /// Text("Hello")
+    ///     .textStyle(.body, weight: .semibold)
+    ///     .foregroundStyle(store.themeColors.labelPrimary)
+    /// ```
+    public func textStyle(
         _ style: TextStyle,
-        weight: Font.Weight? = nil,
-        color: LabelLevel = .primary
+        weight: Font.Weight? = nil
     ) -> some View {
         self
             .font(.system(
@@ -77,6 +84,5 @@ extension View {
                 weight: weight ?? style.defaultWeight
             ))
             .lineSpacing(style.lineHeight - style.size)
-            .themedForeground(color)
     }
 }
